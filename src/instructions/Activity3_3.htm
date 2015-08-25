@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+
+<title>Activity 3.3 - Producer-consumer problem - adding synchronisation.</title>
+
+<link rel="stylesheet" type="text/css" href="../../../../m362.css">
+
+</head>
+
+<body>
+
+<h1>Activity 3.3 - Producer-consumer problem - adding synchronisation.</h1>
+<h2>Purpose</h2>
+
+
+
+<p>The purpose of this activity is </p>
+<ul>
+	<li>to practice using Java's concurrency mechanism for mutual exclusion and 
+	condition synchronisation.</li>
+</ul>
+
+
+<h2>Materials </h2>
+<p>You are provided with a project which has the same interface and classes as activity 3.1: 
+<ul>
+<li><code>Buffer</code> interface. </li>
+<li><code>Main</code> - sets a producer and a consumer thread running.</li>
+<li><code> Producer</code> - extends the <code>Thread</code> class. </li>
+<li><code>Consumer</code> - also extends <code>Thread</code>.</li>
+<li><code>BufferImpl</code> - implements the <code>Buffer</code> 
+interface, but does not make any attempt to control access to the shared 
+data. </li>
+</ul>
+<h2>Task </h2>
+<p>
+In activity 3.1 we implemented a circular buffer with a producer and consumer. We 
+saw examples of how without proper concurrency control such an application would 
+have a number of problems – such as data getting lost. In this activity you are 
+asked to fix these problems, by applying what you have learned from the car park 
+problem.</p>
+<p>The changes you make will be in the class <code>BufferImpl</code>. </p>
+
+<h3>Instructions </h3>
+
+<ol>
+	
+	<li><p>Study class <code>BufferImpl</code> and think about what the critical region is for this problem and therefore 
+	which method(s) should be made atomic. </p></li>
+	<li><p>It is important that data does not get overwritten before it has been read. This is essentially due to the buffer being full, 
+	and the producer thread continuing to place data in the buffer. Think how you could best avoid this. </p></li>
+<li><p>Furthermore, the consumer process should not try to read data from an empty buffer. Work out how this problem can be avoided. </p></li>	
+<li><p>Implement the notification – so that should any processes be waiting, they are alerted that conditions may have changed.</p></li>
+</ol>
+</body>
+</html>

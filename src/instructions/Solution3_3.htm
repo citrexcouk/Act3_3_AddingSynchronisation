@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+
+<title>Solution 3.3 - Producer-consumer problem - adding synchronisation.</title>
+
+<link rel="stylesheet" type="text/css" href="../../../../m362.css">
+
+</head>
+
+<body>
+
+<h1>Solution 3.3 - Producer-consumer problem - adding synchronisation.</h1>
+<h2>Discussion </h2>
+<p>The precise conditions for the two <code>while</code> loops require some working out, 
+but the other parts of this solution are fairly similar to what you have seen in the unit. That is:</p>
+<ol>
+<li>declare both methods as <code>synchronized</code>; </li>
+<li>invoke the <code>wait</code> method within a <code>while</code> loop; </li>
+<li>use <code>notifyAll</code> after the shared data has been updated.</li>
+</ol>
+<h2>Sample Solutions</h2>
+
+<p>The complete code for class <code>BufferImpl</code> is as follows, where we have highlighted in yellow the changes from the original:</p>
+<pre>
+public class BufferImpl implements Buffer
+{
+    private Object[] buf;               // the buffer, declared as an array of objects
+    private int in = 0;                 // index of the next place where an item can be added
+    private int out= 0;                 // index of the next item that can be removed
+    private int count= 0;               // count of the number of items in the buffer
+    private final int size;             // number of slots in the buffer
+    
+    public BufferImpl(int size)
+    {
+        this.size = size;
+        buf = new Object[size];		
+    }
+    
+    public <span style="background-color: #FFFF00">synchronized</span> void put(Object obj) throws InterruptedException
+    {
+       <span style="background-color: #FFFF00">
+        while (count == size)
+        {
+            this.wait();
+        }</span>
+        
+        System.out.println("Putting object " + obj);
+        buf[in] = obj;                             // place object into buffer at index 'in'
+        ++count;                                   // increment count of number of items in buffer
+        in = (in + 1) % size;                      // increment index 'in'
+        
+        <span style="background-color: #FFFF00">this.notifyAll();</span>
+    }
+    
+    public <span style="background-color: #FFFF00">synchronized</span> Object get() throws InterruptedException
+    {
+      <span style="background-color: #FFFF00">
+        while (count == 0)
+        {
+            this.wait();
+        }</span>
+        
+        Object obj = buf[out];                     // get object from buffer at index 'out'
+        System.out.println("     Got object " + obj);
+      
+        --count;                                   // decrement number of items in buffer
+        out = (out + 1) % size;                    // increment index 'out'     
+       <span style="background-color: #FFFF00">
+        this.notifyAll();</span>
+        
+        return (obj);
+    }
+}
+
+</pre>
+
+</body>
+</html>
